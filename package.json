@@ -1,6 +1,6 @@
 {
   "name": "express-ga-middleware",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Express middleware for Google Universal Analytics",
   "main": "index.js",
   "scripts": {
