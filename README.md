@@ -6,6 +6,8 @@ page tracking on your server.
 You can use this with server-served pages, or any custom route
 events.
 
+[![NPM](https://nodei.co/npm/express-ga-middleware.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-ga-middleware/)
+
 ## Install
 
 ```
