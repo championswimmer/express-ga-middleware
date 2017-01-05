@@ -21,7 +21,7 @@ npm install --save express-ga-middleware
 const app = require('express')();
 const expressGa = require('express-ga-middleware');
 
-app.use(expressGA('UA-XXXXXX-X');
+app.use(expressGa('UA-XXXXXX-X'));
 
 app.get('/', function (req, res) { res.send('hello world') } );
 
