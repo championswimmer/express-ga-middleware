@@ -2,6 +2,7 @@
 /**
  * Created by championswimmer on 05/01/17.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 var ua = require("universal-analytics");
 function ExpressGA(uaCode) {
     var visitor = ua(uaCode);
@@ -21,12 +22,16 @@ function ExpressGA(uaCode) {
         next();
     };
     middleware.event =
-        function (category, action, label, value) {
-            visitor.event(category, action, label, value);
+        function (options) {
+            return function (req, res, next) {
+                visitor.event(options.category, options.action, options.label, options.value);
+                next();
+            };
         };
     return middleware;
 }
+exports.ExpressGA = ExpressGA;
 ;
-exports.default = ExpressGA;
 module.exports = ExpressGA;
+exports.default = ExpressGA;
 //# sourceMappingURL=index.js.map

@@ -3,12 +3,22 @@
  */
 
 import * as ua from 'universal-analytics'
-import {Request, Response} from 'express'
+import {Request, Response, RequestHandler, NextFunction} from 'express'
 
-function ExpressGA(uaCode: string) {
+export interface ExpressGAHandler extends RequestHandler {
+    event: (options: GAEventOptions) => RequestHandler
+}
+export interface GAEventOptions {
+    category: string
+    action: string
+    label?: string
+    value?: string | number
+}
+
+export function ExpressGA(uaCode: string): ExpressGAHandler {
     let visitor = ua(uaCode);
 
-    let middleware = function (req: Request, res: Response, next) {
+    let middleware = <ExpressGAHandler> function (req: Request, res: Response, next: NextFunction) {
         if (!req.headers['x-forwarded-for']) {
             req.headers['x-forwarded-for'] = '0.0.0.0'
         }
@@ -19,22 +29,22 @@ function ExpressGA(uaCode: string) {
             uip: req.connection.remoteAddress
             || req.socket.remoteAddress
             || req.connection.remoteAddress
-            || req.headers['x-forwarded-for'].split(',').pop()
+            || (<string>req.headers['x-forwarded-for']).split(',').pop()
         }).send();
         next();
     };
+
     middleware.event =
-      function (
-      category: string,
-      action: string,
-      label?: string,
-      value?: string | number
-    ) {
-        visitor.event(category, action, label, value)
+      function (options: GAEventOptions) {
+
+        return <RequestHandler> function (req: Request, res: Response, next: NextFunction) {
+            visitor.event(options.category, options.action, options.label, options.value)
+            next()
+        }
     }
 
     return middleware;
 };
 
-export = ExpressGA
+module.exports = ExpressGA
 export default ExpressGA
