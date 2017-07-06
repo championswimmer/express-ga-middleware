@@ -2,12 +2,10 @@
 /**
  * Created by championswimmer on 05/01/17.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-const universal_analytics_1 = require("universal-analytics");
+var ua = require("universal-analytics");
 function ExpressGA(uaCode) {
-    this.uaCode = uaCode;
-    this.middleware = function (req, res, next) {
-        let visitor = universal_analytics_1.default(this.uaCode);
+    var visitor = ua(uaCode);
+    var middleware = function (req, res, next) {
         if (!req.headers['x-forwarded-for']) {
             req.headers['x-forwarded-for'] = '0.0.0.0';
         }
@@ -22,8 +20,13 @@ function ExpressGA(uaCode) {
         }).send();
         next();
     };
-    return this.middleware;
+    middleware.event =
+        function (category, action, label, value) {
+            visitor.event(category, action, label, value);
+        };
+    return middleware;
 }
 ;
 exports.default = ExpressGA;
+module.exports = ExpressGA;
 //# sourceMappingURL=index.js.map

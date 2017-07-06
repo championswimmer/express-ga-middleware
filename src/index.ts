@@ -2,14 +2,13 @@
  * Created by championswimmer on 05/01/17.
  */
 
-import ua from 'universal-analytics'
+import * as ua from 'universal-analytics'
 import {Request, Response} from 'express'
 
-function ExpressGA(uaCode: String) {
-    this.uaCode = uaCode;
+function ExpressGA(uaCode: string) {
+    let visitor = ua(uaCode);
 
-    this.middleware = function (req: Request, res: Response, next) {
-        let visitor = ua(this.uaCode);
+    let middleware = function (req: Request, res: Response, next) {
         if (!req.headers['x-forwarded-for']) {
             req.headers['x-forwarded-for'] = '0.0.0.0'
         }
@@ -24,9 +23,18 @@ function ExpressGA(uaCode: String) {
         }).send();
         next();
     };
+    middleware.event =
+      function (
+      category: string,
+      action: string,
+      label?: string,
+      value?: string | number
+    ) {
+        visitor.event(category, action, label, value)
+    }
 
-    return this.middleware;
+    return middleware;
 };
 
-
-export default ExpressGA;
+export = ExpressGA
+export default ExpressGA

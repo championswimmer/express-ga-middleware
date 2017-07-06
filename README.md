@@ -17,6 +17,8 @@ npm install --save express-ga-middleware
 
 ## Usage
 
+To simply track page views use this -
+
 ```javascript
 const app = require('express')();
 const expressGa = require('express-ga-middleware');
@@ -26,6 +28,24 @@ app.use(expressGa('UA-XXXXXX-X'));
 app.get('/', function (req, res) { res.send('hello world') } );
 
 app.listen(4040);
+```
+
+
+If you also want to generate events, we have a .event() middleware too.
+```js
+var expGa = expressGa('UA-XXXXXX-X');
+
+//Use globally for all pageviews
+app.use(expGa);
+
+//Use event on a path
+app.use('/path/of/event', expGa.event("Category",
+                        "Action",
+                         "Label",
+                         10 /*value*/),
+    function (req, res) {
+    //your path middleware code here
+});
 ```
 
 ## What it tracks
