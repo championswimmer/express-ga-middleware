@@ -6,6 +6,8 @@ page tracking on your server.
 You can use this with server-served pages, or any custom route
 events.
 
+[![TypeScript](https://img.shields.io/badge/TypeScript-declared-blue.svg)](https://typescriptlang.org/)
+
 [![NPM](https://nodei.co/npm/express-ga-middleware.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-ga-middleware/)
 
 ## Install
@@ -39,10 +41,12 @@ var expGa = expressGa('UA-XXXXXX-X');
 app.use(expGa);
 
 //Use event on a path
-app.use('/path/of/event', expGa.event("Category",
-                        "Action",
-                         "Label",
-                         10 /*value*/),
+app.use('/path/of/event', expGa.event({
+    category: 'cat',
+    action: 'act',
+    label: 'lab',
+    value: 3.5
+}),
     function (req, res) {
     //your path middleware code here
 });
