@@ -52,6 +52,25 @@ app.use('/path/of/event', expGa.event({
 });
 ```
 
+The .event() function is available in the `req` object too, 
+inside `ga` object.
+
+```js
+app.use(expressGa('UA-XXXXXX-X'));
+
+app.get('/', (req, res) => {
+  req.ga.event({
+      category: 'cat',
+      action: 'act',
+      label: 'lab',
+      value: 3.5
+  }, (err) => {
+    if (err) throw err
+  })
+  res.send('Hello World')
+})
+```
+
 ## What it tracks
 
 The middleware automatically tracks the following
